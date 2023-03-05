@@ -4,9 +4,20 @@ import { required } from '@vuelidate/validators'
 import axios from 'axios'
 const apiURL = import.meta.env.VITE_ROOT_API
 
+import { ref } from 'vue'
+import { useServiceStore } from "@/store/serviceCart";
+
 export default {
   setup() {
-    return { v$: useVuelidate({ $autoDirty: true }) }
+    const cart = useServiceStore();
+    const servicename = ref("");
+    const status = ref("");
+
+    return {
+      servicename,
+      status,
+      cart
+    };
   },
   data() {
     return {
@@ -23,7 +34,8 @@ export default {
           zip: ''
         },
         description: ''
-      }
+      },
+      v$: useVuelidate({ $autoDirty: true })
     }
   },
   methods: {
@@ -134,58 +146,19 @@ export default {
           <div></div>
           <div></div>
           <!-- form field -->
-          <div class="flex flex-col grid-cols-3">
+          <!-- lists all services that are active to checkbox-->
+          <div class="flex flex-col grid-cols-3" >
             <label>Services Offered at Event</label>
-            <div>
+            <div v-for="item in cart.filterActive">
               <label for="familySupport" class="inline-flex items-center">
                 <input
                   type="checkbox"
                   id="familySupport"
-                  value="Family Support"
                   v-model="event.services"
                   class="rounded border-gray-300 text-indigo-600 shadow-sm focus:border-indigo-300 focus:ring focus:ring-offset-0 focus:ring-indigo-200 focus:ring-opacity-50"
-                  notchecked
-                />
-                <span class="ml-2">Family Support</span>
-              </label>
-            </div>
-            <div>
-              <label for="adultEducation" class="inline-flex items-center">
-                <input
-                  type="checkbox"
-                  id="adultEducation"
-                  value="Adult Education"
-                  v-model="event.services"
-                  class="rounded border-gray-300 text-indigo-600 shadow-sm focus:border-indigo-300 focus:ring focus:ring-offset-0 focus:ring-indigo-200 focus:ring-opacity-50"
-                  notchecked
-                />
-                <span class="ml-2">Adult Education</span>
-              </label>
-            </div>
-            <div>
-              <label for="youthServices" class="inline-flex items-center">
-                <input
-                  type="checkbox"
-                  id="youthServices"
-                  value="Youth Services Program"
-                  v-model="event.services"
-                  class="rounded border-gray-300 text-indigo-600 shadow-sm focus:border-indigo-300 focus:ring focus:ring-offset-0 focus:ring-indigo-200 focus:ring-opacity-50"
-                  notchecked
-                />
-                <span class="ml-2">Youth Services Program</span>
-              </label>
-            </div>
-            <div>
-              <label for="childhoodEducation" class="inline-flex items-center">
-                <input
-                  type="checkbox"
-                  id="childhoodEducation"
-                  value="Early Childhood Education"
-                  v-model="event.services"
-                  class="rounded border-gray-300 text-indigo-600 shadow-sm focus:border-indigo-300 focus:ring focus:ring-offset-0 focus:ring-indigo-200 focus:ring-opacity-50"
-                  notchecked
-                />
-                <span class="ml-2">Early Childhood Education</span>
+                  :value= "item.servicename"
+                  />
+                <span class="ml-2">{{ item.servicename }}</span>
               </label>
             </div>
           </div>
