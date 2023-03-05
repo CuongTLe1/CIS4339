@@ -56,6 +56,16 @@ export default {
               </router-link>
             </li>
             <li>
+              <router-link to="/servicesform">
+                <span
+                  style="position: relative; top: 6px"
+                  class="material-icons"
+                  >local_activity</span
+                >
+                Add Service
+              </router-link>
+            </li>
+            <li>
               <router-link to="/findclient">
                 <span
                   style="position: relative; top: 6px"
@@ -73,6 +83,16 @@ export default {
                   >search</span
                 >
                 Find Event
+              </router-link>
+            </li>
+            <li>
+              <router-link to="/findServices">
+                <span
+                  style="position: relative; top: 6px"
+                  class="material-icons"
+                  >search</span
+                >
+                Find Service
               </router-link>
             </li>
           </ul>

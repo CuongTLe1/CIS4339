@@ -39,7 +39,24 @@ const routes = [
     name: 'eventdetails',
     props: true,
     component: () => import('../components/eventDetails.vue')
-  }
+  },
+  {
+  path: '/servicesform',
+  name: 'servicesform',
+  component: () => import('../components/servicesForm.vue')
+},
+{
+  path: '/findservices',
+  name: 'findservices',
+  props: true,
+  component: () => import('../components/findServices.vue'),
+},
+{
+  path: '/updateservice/:id',
+  name: 'updateservice',
+  props: true,
+  component: () => import('../components/updateService.vue'),
+}
 ]
 const router = createRouter({
   history: createWebHistory(),
