@@ -18,3 +18,6 @@ VITE_ROOT_API is the URL for the backend API, either on localhost or in the clou
 ### Compiles and hot-reloads for development
 
     npm run dev
+login page
+username and password for viewer:ab
+username and password for editor:cb

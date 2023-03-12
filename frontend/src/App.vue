@@ -48,7 +48,7 @@ export default {
               </router-link>
             </li>
             <li>
-              <router-link to="/intakeform">
+              <router-link v-if="user.isLoggedIn && user.role=='Editor'"  to="/intakeform">
                 <span
                   style="position: relative; top: 6px"
                   class="material-icons"
@@ -58,7 +58,7 @@ export default {
               </router-link>
             </li>
             <li>
-              <router-link to="/eventform">
+              <router-link v-if="user.isLoggedIn && user.role=='Editor'" to="/eventform">
                 <span
                   style="position: relative; top: 6px"
                   class="material-icons"
@@ -68,7 +68,7 @@ export default {
               </router-link>
             </li>
             <li>
-              <router-link to="/servicesform">
+              <router-link v-if="user.isLoggedIn && user.role=='Editor'" to="/servicesform">
                 <span
                   style="position: relative; top: 6px"
                   class="material-icons"
@@ -98,7 +98,7 @@ export default {
               </router-link>
             </li>
             <li>
-              <router-link to="/findServices">
+              <router-link v-if="user.isLoggedIn" to="/findServices">
                 <span
                   style="position: relative; top: 6px"
                   class="material-icons"
