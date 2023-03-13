@@ -3,7 +3,8 @@ import useVuelidate from '@vuelidate/core'
 import { required } from '@vuelidate/validators'
 import axios from 'axios'
 import { DateTime } from 'luxon'
-const apiURL = import.meta.env.VITE_ROOT_API
+const apiURL = 'https://dataplatform-api.azurewebsites.net'
+//const apiURL = import.meta.env.VITE_ROOT_API
 
 export default {
   props: ['id'],

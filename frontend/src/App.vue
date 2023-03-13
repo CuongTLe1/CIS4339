@@ -2,10 +2,16 @@
 <!-- eslint-disable prettier/prettier -->
 <script>
 import axios from 'axios'
-const apiURL = import.meta.env.VITE_ROOT_API
+import { useLoggedInUserStore } from "@/store/loggedInUser";
+const apiURL = 'https://dataplatform-api.azurewebsites.net'
+//const apiURL = import.meta.env.VITE_ROOT_API
 
 export default {
   name: 'App',
+  setup() {
+    const user = useLoggedInUserStore();
+    return { user };
+  },
   data() {
     return {
       orgName: 'Dataplatform'
@@ -27,9 +33,10 @@ export default {
         </section>
         <nav class="mt-10">
           <ul class="flex flex-col gap-4">
-            <li>
-              <router-link class="nav-link" to="/Login">
-                <span
+            <!--If the user is already logged in, dont show the login nav link-->
+            <li v-if="!user.isLoggedIn">
+              <router-link  class="nav-link" to="/Login">
+                <span 
                   style="position: relative; top: 6px"
                   class="material-icons"
                   >login</span
@@ -47,8 +54,9 @@ export default {
                 Dashboard
               </router-link>
             </li>
-            <li>
-              <router-link v-if="user.isLoggedIn && user.role=='Editor'"  to="/intakeform">
+            <!--certain links are displayed only when the role of the logged in user is an Editor -->
+            <li v-if="user.isLoggedIn && user.role=='Editor'">
+              <router-link   to="/intakeform">
                 <span
                   style="position: relative; top: 6px"
                   class="material-icons"
@@ -57,8 +65,8 @@ export default {
                 Client Intake Form
               </router-link>
             </li>
-            <li>
-              <router-link v-if="user.isLoggedIn && user.role=='Editor'" to="/eventform">
+            <li v-if="user.isLoggedIn && user.role=='Editor'">
+              <router-link  to="/eventform">
                 <span
                   style="position: relative; top: 6px"
                   class="material-icons"
@@ -67,8 +75,8 @@ export default {
                 Create Event
               </router-link>
             </li>
-            <li>
-              <router-link v-if="user.isLoggedIn && user.role=='Editor'" to="/servicesform">
+            <li v-if="user.isLoggedIn && user.role=='Editor'">
+              <router-link to="/servicesform">
                 <span
                   style="position: relative; top: 6px"
                   class="material-icons"
@@ -77,8 +85,9 @@ export default {
                 Add Service
               </router-link>
             </li>
-            <li>
-              <router-link to="/findclient">
+            <!--Certain links are displayed only if the user logged in is a viewer or editor-->
+            <li v-if="user.isLoggedIn">
+              <router-link  to="/findclient">
                 <span
                   style="position: relative; top: 6px"
                   class="material-icons"
@@ -87,8 +96,8 @@ export default {
                 Find Client
               </router-link>
             </li>
-            <li>
-              <router-link to="/findevents">
+            <li v-if="user.isLoggedIn">
+              <router-link   to="/findevents">
                 <span
                   style="position: relative; top: 6px"
                   class="material-icons"
@@ -97,8 +106,8 @@ export default {
                 Find Event
               </router-link>
             </li>
-            <li>
-              <router-link v-if="user.isLoggedIn" to="/findServices">
+            <li v-if="user.isLoggedIn">
+              <router-link  to="/findServices">
                 <span
                   style="position: relative; top: 6px"
                   class="material-icons"
@@ -107,6 +116,17 @@ export default {
                 Find Service
               </router-link>
             </li>
+            <!--logs out the user by calling store action (logout) and routes to the home page-->
+            <li v-if="user.isLoggedIn"> 
+              <router-link  to="/" @click="user.logout()">
+                <span
+                  style="position: relative; top: 6px"
+                  class="material-icons"
+                  >login</span
+                >
+                Logout
+              </router-link>
+              </li>
           </ul>
         </nav>
       </header>

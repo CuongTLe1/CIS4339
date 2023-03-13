@@ -1,25 +1,28 @@
 <script>
 import { ref } from 'vue'
 import { useServiceStore } from "@/store/serviceCart";
+import { useLoggedInUserStore } from "@/store/loggedInUser";
 
 export default {
   data(){
     return{
-    searchBy: '',
-    searchstatus: '',
-    searchname: '',
-    queryData: []
+    searchBy: '', //the search by field whether to search by name or status
+    searchstatus: '', //field to search by status
+    searchname: '', //field to search by name
+    queryData: [] //query data for services
     } 
   },
   setup() {
     const cart = useServiceStore();
     const servicename = ref("");
     const status = ref("");
+    const user = useLoggedInUserStore();
 
     return {
       servicename,
       status,
-      cart
+      cart,
+      user
     };
   },
   methods: {
@@ -27,9 +30,11 @@ export default {
     editService(serviceID) {
       this.$router.push({ name: 'updateservice', params: { id: serviceID } })
     },
+    // call store getter (getServies) to get all services
     getServices(){
       this.queryData = this.cart.getAll
     },
+    // call different store actions depending on the selected search by option by the user
     handleSubmitForm() {
       if (this.searchBy === 'Status') {
         this.queryData = this.cart.searchByStatus(this.searchstatus) 
@@ -40,8 +45,8 @@ export default {
     clearSearch() {
       // Resets all the variables
       this.searchBy = ''
-      this.servicename = ''
-      this.status = ''
+      this.searchname = ''
+      this.searchstatus = ''
 
       this.getServices()
     },
@@ -144,12 +149,15 @@ export default {
               <th class="p-4 text-left">Status</th>
             </tr>
           </thead>
-          <!-- When user clicks on a row, navigate to the update service-->
+          <!-- When user clicks on a row, navigate to the update service page
+            to update the selected row item-->
           <tbody class="divide-y divide-gray-300">
-            <!--when row is click, call function and pass argument-->
+            <!-- when row is clicked, checks if the current logged in user is an editor-->
+            <!-- then call function (editService) and pass argument (id of service to be updated)-->
             <tr     
-            @click="editService(item.id)"       
+            @click="user.role == 'Editor'? editService(item.id): null"       
             v-for="item in queryData">
+              <!-- displays the queried data depending on the search of the user-->
               <td class="p-2 text-left">
                 {{ item.servicename }} 
               </td>
@@ -164,3 +172,5 @@ export default {
     </div>
   </main>
 </template>
+
+<!--reference: https://stackoverflow.com/questions/40901552/can-i-make-some-condition-inside-v-onclick-->

@@ -2,7 +2,9 @@
 import useVuelidate from '@vuelidate/core'
 import { required } from '@vuelidate/validators'
 import axios from 'axios'
-const apiURL = import.meta.env.VITE_ROOT_API
+import { useLoggedInUserStore } from "@/store/loggedInUser";
+const apiURL = 'https://dataplatform-api.azurewebsites.net'
+//const apiURL = import.meta.env.VITE_ROOT_API
 
 import { ref } from 'vue'
 import { useServiceStore } from "@/store/serviceCart";
@@ -12,11 +14,13 @@ export default {
     const cart = useServiceStore();
     const servicename = ref("");
     const status = ref("");
+    const user = useLoggedInUserStore();
 
     return {
       servicename,
       status,
-      cart
+      cart,
+      user
     };
   },
   data() {
@@ -149,6 +153,7 @@ export default {
           <!-- lists all services that are active to checkbox-->
           <div class="flex flex-col grid-cols-3" >
             <label>Services Offered at Event</label>
+            <!-- call the store getter (filterActive) to get services that only has active status-->
             <div v-for="item in cart.filterActive">
               <label for="familySupport" class="inline-flex items-center">
                 <input
@@ -233,7 +238,7 @@ export default {
         </div>
 
         <div class="flex justify-between mt-10 mr-20">
-          <button :disabled="!isLoggedIn"  class="bg-red-700 text-white rounded" type="submit">
+          <button  class="bg-red-700 text-white rounded" type="submit">
             Add New Event
           </button>
         </div>
@@ -241,3 +246,5 @@ export default {
     </div>
   </main>
 </template>
+
+<!--references: https://stackoverflow.com/questions/64541944/vue-js-how-do-you-bind-a-checkbox-to-an-array-in-a-v-for-->

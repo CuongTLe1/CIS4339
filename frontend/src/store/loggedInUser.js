@@ -7,7 +7,7 @@ export const useLoggedInUserStore = defineStore({
   //central part of the store
   state: () => {
     return {
-      role: '',
+      role: '', //Viewer or Editor
       isLoggedIn: false,
       name:''
     }
@@ -30,8 +30,9 @@ export const useLoggedInUserStore = defineStore({
       }
     },
     logout() {
-      this.patch({
+      this.$patch({
         name: '',
+        role:'',
         isLoggedIn: false
       });
 
@@ -43,7 +44,7 @@ export const useLoggedInUserStore = defineStore({
 //simulate a login
 function apiLogin(u, p) {
   if (u === "ab" && p === "ab") return Promise.resolve({ isAllowed: true, role:"Viewer", name: "John Doe" });
-  if (u === "cb" && p === "cb") return Promise.resolve({ isAllowed: true, role:"Editor", name: "John Doe" });
+  if (u === "cb" && p === "cb") return Promise.resolve({ isAllowed: true, role:"Editor", name: "John Smith" });
   if (p === "ab") return Promise.resolve({ isAllowed: false });
   return Promise.reject(new Error("invalid credentials"));
 }

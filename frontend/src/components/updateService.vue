@@ -13,14 +13,18 @@ export default {
 
     // function to edit service
     function editService() {
-      cart.updateitem(props.id, this.servicename, this.status); //call store action and pass arguments
+      //call store action (updateitem) and pass arguments: updated service name and status
+      // navigate to "find services page" after updating a service
+      cart.updateitem(props.id, this.servicename, this.status); 
       servicename.value = "";
       status.value = "";
-      router.push({ path: '/findservices' }); // navigate to find services page after updating a service
+      router.push({ path: '/findservices' }); 
     }
 
     return {
-      servicename: cart.getId(props.id).servicename,
+      // call the store getters(getId) to get the current servicename and status to be updated
+      // and to display them on the form
+      servicename: cart.getId(props.id).servicename, 
       status: cart.getId(props.id).status,
       cart,
       editService
@@ -39,6 +43,7 @@ export default {
         Update Service
         </h1>
       <div class="px-10 py-20">
+        <!--calls the editservice function on submitting form-->
       <form @submit.prevent="editService">
       <div
           class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-x-6 gap-y-10"

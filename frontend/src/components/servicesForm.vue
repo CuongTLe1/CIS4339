@@ -13,7 +13,8 @@ export default {
     // function for adding a service
     // navigates to the find services page after submitting form
     function addServiceToCart() {
-      cart.addItem(this.servicename, this.status); // call store action passing arguments
+      // call store action (addItem) passing arguments(new service and its status)
+      cart.addItem(this.servicename, this.status); 
       this.servicename = "";
       this.status = "";
       router.push({ path: '/findservices' });
@@ -43,7 +44,7 @@ export default {
           class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-x-6 gap-y-10"
         >
           <!-- form field -->
-          <!--Requires service name and status-->
+          <!--Requires service name and status using the required attribute-->
           <h2 class="text-2xl font-bold">Service Details</h2>
             <div class="flex flex-col">
               <label class="block">
@@ -70,7 +71,7 @@ export default {
         </div>
 
         <div class="flex justify-between mt-10 mr-20">
-          <button :disabled="!isLoggedIn" class="bg-red-700 text-white rounded" type="submit">
+          <button class="bg-red-700 text-white rounded" type="submit">
             Add New Service
           </button>
         </div>

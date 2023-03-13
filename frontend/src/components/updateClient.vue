@@ -4,7 +4,8 @@ import { required, email, alpha, numeric } from '@vuelidate/validators'
 import VueMultiselect from 'vue-multiselect'
 import axios from 'axios'
 import { DateTime } from 'luxon'
-const apiURL = import.meta.env.VITE_ROOT_API
+const apiURL = 'https://dataplatform-api.azurewebsites.net'
+//const apiURL = import.meta.env.VITE_ROOT_API
 
 export default {
   props: ['id'],

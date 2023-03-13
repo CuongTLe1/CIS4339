@@ -1,9 +1,18 @@
 <script>
 import { DateTime } from 'luxon'
 import axios from 'axios'
-const apiURL = import.meta.env.VITE_ROOT_API
+import { useLoggedInUserStore } from "@/store/loggedInUser";
+const apiURL = 'https://dataplatform-api.azurewebsites.net'
+//const apiURL = import.meta.env.VITE_ROOT_API
 
 export default {
+  setup(){
+    const user = useLoggedInUserStore();
+
+    return{
+      user
+    }
+  },
   data() {
     return {
       events: [],
@@ -147,8 +156,9 @@ export default {
             </tr>
           </thead>
           <tbody class="divide-y divide-gray-300">
+            <!--if the logged in user is an editor, allow to click on the row item to update-->
             <tr
-              @click="editEvent(event._id)"
+              @click="user.role == 'Editor'? editEvent(event._id) : null"
               v-for="event in events"
               :key="event._id"
             >

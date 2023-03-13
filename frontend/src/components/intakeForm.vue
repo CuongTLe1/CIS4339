@@ -2,11 +2,17 @@
 import useVuelidate from '@vuelidate/core'
 import { required, email, alpha, numeric } from '@vuelidate/validators'
 import axios from 'axios'
-const apiURL = import.meta.env.VITE_ROOT_API
+import { useLoggedInUserStore } from "@/store/loggedInUser";
+const apiURL = 'https://dataplatform-api.azurewebsites.net'
+//const apiURL = import.meta.env.VITE_ROOT_API
 
 export default {
   setup() {
-    return { v$: useVuelidate({ $autoDirty: true }) }
+    const user = useLoggedInUserStore();
+    return { 
+      v$: useVuelidate({ $autoDirty: true }), 
+      user 
+    }
   },
   data() {
     return {
@@ -308,7 +314,7 @@ export default {
           <div></div>
           <!-- submit button -->
           <div class="flex justify-between mt-10 mr-20">
-            <button :disabled="!isLoggedIn" class="bg-red-700 text-white rounded" type="submit">
+            <button class="bg-red-700 text-white rounded" type="submit">
               Add Client
             </button>
           </div>

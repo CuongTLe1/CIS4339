@@ -1,5 +1,6 @@
 import { defineStore } from "pinia";
 
+//defining a store
 export const useServiceStore = defineStore({
   id: "cart",
   state: () => ({
@@ -34,7 +35,7 @@ export const useServiceStore = defineStore({
       return state.services;
     },
 
-    //filters any services that has a Active
+    //filters any services that has an Active Status
     filterActive: (state) =>
     {
       return state.services.filter((service) =>
@@ -81,3 +82,9 @@ export const useServiceStore = defineStore({
     }
   }
 });
+
+//references:
+//https://stackoverflow.com/questions/41503527/vuexjs-getter-with-argument
+//https://pinia.vuejs.org/core-concepts/getters.html
+//https://www.youtube.com/watch?v=1LEHy6HY91M&ab_channel=CodeWithTony
+//https://www.youtube.com/watch?v=sKGh2wp4QfM&t=692s&ab_channel=AaronSaunders

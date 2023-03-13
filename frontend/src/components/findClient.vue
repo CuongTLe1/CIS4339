@@ -1,8 +1,17 @@
 <script>
 import axios from 'axios'
-const apiURL = import.meta.env.VITE_ROOT_API
+import { useLoggedInUserStore } from "@/store/loggedInUser";
+const apiURL = 'https://dataplatform-api.azurewebsites.net'
+//const apiURL = import.meta.env.VITE_ROOT_API
 
 export default {
+  setup(){
+    const user = useLoggedInUserStore();
+
+    return{
+      user
+    }
+  },
   data() {
     return {
       queryData: [],
@@ -151,8 +160,9 @@ export default {
             </tr>
           </thead>
           <tbody class="divide-y divide-gray-300">
+            <!--if the logged in user is an editor, allow to click on the row item to update-->
             <tr
-              @click="editClient(client._id)"
+              @click="user.role == 'Editor'? editClient(client._id): null"
               v-for="client in queryData"
               :key="client._id"
             >
