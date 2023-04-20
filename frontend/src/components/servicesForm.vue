@@ -1,34 +1,51 @@
 <script>
-import { ref } from 'vue'
-import { useServiceStore } from "@/store/serviceCart";
-import { useRouter} from "vue-router"
+import useVuelidate from '@vuelidate/core'
+import { required } from '@vuelidate/validators'
+import axios from 'axios'
+const apiURL = import.meta.env.VITE_ROOT_API
 
 export default {
-  // composition api
   setup() {
-    const router = useRouter();
-    const cart = useServiceStore();
-    const servicename = ref("");
-
+    return { v$: useVuelidate({ $autoDirty: true }) }
+  },
+  data() {
+    return {
+      service: {
+        name: '',
+        status: 'Active' // default status when creating a new service
+      }
+    }
+  },
+  methods: {
     // function for adding a service
     // navigates to the find services page after submitting form
-    function addServiceToCart() {
-      // call store action (addItem) passing arguments(new service and its status)
-      cart.addItem(this.servicename, this.status); 
-      this.servicename = "";
-      this.status = "";
-      router.push({ path: '/findservices' });
+    async handleSubmitForm() {
+      // Checks to see if there are any errors in validation
+      const isFormCorrect = await this.v$.$validate()
+      // If no errors found. isFormCorrect = True then the form is submitted
+      if (isFormCorrect) {
+        axios
+          .post(`${apiURL}/services`, this.service)
+          .then(() => {
+            alert('Service has been added.')
+            this.$router.push({ name: 'findservices' })
+          })
+          .catch((error) => {
+            console.log(error)
+          })
+      }
     }
-
+  },
+  // sets validations for the various data properties
+  validations() {
     return {
-      servicename,
-      status: 'Active', //default value for status
-      cart,
-      addServiceToCart,
-    };
-    
+      service: {
+        name: { required },
+        status: { required }
+      }
+    }
   }
-};
+}
 </script>
 <template>
   <main>
@@ -39,7 +56,7 @@ export default {
         Create New Service
         </h1>
       <div class="px-10 py-20">
-      <form @submit.prevent="addServiceToCart">
+      <form @submit.prevent="handleSubmitForm">
       <div
           class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-x-6 gap-y-10"
         >
@@ -53,7 +70,7 @@ export default {
               <input
                 type="text"
                 class="w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
-                v-model="servicename"
+                v-model="service.name"
                 required
               />
               </label>
@@ -64,8 +81,8 @@ export default {
               <span class="text-gray-700">Status</span>
               <span style="color: #ff0000">*</span>
               <br>
-              <input type="radio" name="status" v-model="status" value="Active" >Active
-              <input type="radio" name="status" v-model="status" value="Not Active" >Not Active
+              <input type="radio" name="status" v-model="service.status" value="Active" >Active
+              <input type="radio" name="status" v-model="service.status" value="Not Active" >Not Active
               </label>
             </div>
         </div>

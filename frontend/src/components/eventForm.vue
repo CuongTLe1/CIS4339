@@ -2,26 +2,11 @@
 import useVuelidate from '@vuelidate/core'
 import { required } from '@vuelidate/validators'
 import axios from 'axios'
-import { useLoggedInUserStore } from "@/store/loggedInUser";
-const apiURL = 'https://dataplatform-api.azurewebsites.net'
-//const apiURL = import.meta.env.VITE_ROOT_API
-
-import { ref } from 'vue'
-import { useServiceStore } from "@/store/serviceCart";
+const apiURL = import.meta.env.VITE_ROOT_API
 
 export default {
   setup() {
-    const cart = useServiceStore();
-    const servicename = ref("");
-    const status = ref("");
-    const user = useLoggedInUserStore();
-
-    return {
-      servicename,
-      status,
-      cart,
-      user
-    };
+    return { v$: useVuelidate({ $autoDirty: true }) }
   },
   data() {
     return {
@@ -39,7 +24,8 @@ export default {
         },
         description: ''
       },
-      v$: useVuelidate({ $autoDirty: true })
+      // array to hold active services
+      service:[]
     }
   },
   methods: {
@@ -59,6 +45,13 @@ export default {
           })
       }
     }
+  },
+  // get all services that are Active
+  created(){
+    axios.get(`${apiURL}/services/search/?status=Active&searchBy=status`).then((res) => {
+      // simplified setting client
+      this.service = res.data
+    })
   },
   // sets validations for the various data properties
   validations() {
@@ -150,21 +143,19 @@ export default {
           <div></div>
           <div></div>
           <!-- form field -->
-          <!-- lists all services that are active to checkbox-->
-          <div class="flex flex-col grid-cols-3" >
+          <div class="flex flex-col grid-cols-3">
+            <!-- lists all services that are active to checkbox-->
             <label>Services Offered at Event</label>
-            <!-- call the store getter (filterActive) to get services that only has active status-->
-            <div v-for="item in cart.filterActive">
-              <label for="familySupport" class="inline-flex items-center">
-                <input
-                  type="checkbox"
-                  id="familySupport"
-                  v-model="event.services"
-                  class="rounded border-gray-300 text-indigo-600 shadow-sm focus:border-indigo-300 focus:ring focus:ring-offset-0 focus:ring-indigo-200 focus:ring-opacity-50"
-                  :value= "item.servicename"
-                  />
-                <span class="ml-2">{{ item.servicename }}</span>
-              </label>
+            <div v-for="each in service">
+            <label class="inline-flex items-center">
+              <input
+              type="checkbox"
+              v-model="event.services"
+              class="rounded border-gray-300 text-indigo-600 shadow-sm focus:border-indigo-300 focus:ring focus:ring-offset-0 focus:ring-indigo-200 focus:ring-opacity-50"
+              :value = "each._id"
+              />
+              <span class="ml-2">{{ each.name }}</span>
+            </label>
             </div>
           </div>
         </div>
@@ -238,7 +229,7 @@ export default {
         </div>
 
         <div class="flex justify-between mt-10 mr-20">
-          <button  class="bg-red-700 text-white rounded" type="submit">
+          <button class="bg-red-700 text-white rounded" type="submit">
             Add New Event
           </button>
         </div>
@@ -246,5 +237,3 @@ export default {
     </div>
   </main>
 </template>
-
-<!--references: https://stackoverflow.com/questions/64541944/vue-js-how-do-you-bind-a-checkbox-to-an-array-in-a-v-for-->

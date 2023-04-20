@@ -88,9 +88,11 @@ const eventDataSchema = new Schema(
       type: String,
       required: true
     },
+    //  services field referencing the service collection
     services: [
       {
-        type: String
+        type: String,
+        ref: 'service'
       }
     ],
     date: {
@@ -129,10 +131,41 @@ const eventDataSchema = new Schema(
   }
 )
 
+// collection for services
+const serviceDataSchema = new Schema(
+  {
+    _id: { 
+      type: String, 
+      default: uuid.v1
+    },
+    // org which this services belongs to
+    org: {
+      type: String,
+      required: true
+    },
+    // name of service
+    name: {
+      type: String,
+      required: true
+    }
+    ,
+    // status of service (Active or Not Active)
+    status: {
+      type: String,
+      required: true
+    }
+  },
+  {
+    collection: 'service'
+  }
+)
+
 // create models from mongoose schemas
 const clients = mongoose.model('client', clientDataSchema)
 const orgs = mongoose.model('org', orgDataSchema)
 const events = mongoose.model('event', eventDataSchema)
 
+const services = mongoose.model('service', serviceDataSchema)
+
 // package the models in an object to export
-module.exports = { clients, orgs, events }
+module.exports = { clients, orgs, events , services}

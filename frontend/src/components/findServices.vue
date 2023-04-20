@@ -1,68 +1,63 @@
 <script>
-import { ref } from 'vue'
-import { useServiceStore } from "@/store/serviceCart";
-import { useLoggedInUserStore } from "@/store/loggedInUser";
+import axios from 'axios'
+const apiURL = import.meta.env.VITE_ROOT_API
 
 export default {
-  data(){
-    return{
-    searchBy: '', //the search by field whether to search by name or status
-    searchstatus: '', //field to search by status
-    searchname: '', //field to search by name
-    queryData: [] //query data for services
+  data() {
+    return {
+      services: [], //array to hold all arrays
+      // Parameter for search to occur
+      searchBy: '',
+      name: '',
+      status: ''
     } 
   },
-  setup() {
-    const cart = useServiceStore();
-    const servicename = ref("");
-    const status = ref("");
-    const user = useLoggedInUserStore();
-
-    return {
-      servicename,
-      status,
-      cart,
-      user
-    };
+  mounted() {
+    this.getServices()
   },
   methods: {
-    // route to the update service page with id parameter
-    editService(serviceID) {
-      this.$router.push({ name: 'updateservice', params: { id: serviceID } })
-    },
-    // call store getter (getServies) to get all services
-    getServices(){
-      this.queryData = this.cart.getAll
-    },
-    // call different store actions depending on the selected search by option by the user
+    // different endpoints depending on the selected search by option by the user
     handleSubmitForm() {
-      if (this.searchBy === 'Status') {
-        this.queryData = this.cart.searchByStatus(this.searchstatus) 
-      }else if (this.searchBy === 'Service Name') {
-        this.queryData = this.cart.searchByName(this.searchname) 
+      let endpoint = ''
+      if (this.searchBy === 'Service Name') {
+        endpoint = `services/search/?name=${this.name}&searchBy=name`
+      } else if (this.searchBy === 'Service Status') {
+        endpoint = `services/search/?status=${this.status}&searchBy=status`
       }
+      axios.get(`${apiURL}/${endpoint}`).then((res) => {
+        this.services = res.data
+      })
+    },
+    // get all services
+    getServices() {
+      axios.get(`${apiURL}/services`).then((res) => {
+        this.services = res.data
+      })
+      window.scrollTo(0, 0)
     },
     clearSearch() {
       // Resets all the variables
       this.searchBy = ''
-      this.searchname = ''
-      this.searchstatus = ''
+      this.name = ''
+      this.status = ''
 
       this.getServices()
     },
-  },
-  mounted(){
-    this.getServices()
+    //route to the update service page with id parameter
+    editService(serviceID) {
+      this.$router.push({ name: 'updateservice', params: { id: serviceID } })
+    }
   }
 }
 </script>
+
 <template>
   <main>
     <div>
       <h1
         class="font-bold text-4xl text-red-700 tracking-widest text-center mt-10"
       >
-        Find Services 
+        Find Services
       </h1>
     </div>
     <div class="px-10 pt-20">
@@ -76,7 +71,7 @@ export default {
             v-model="searchBy"
           >
             <option value="Service Name">Service Name</option>
-            <option value="Status">Status</option>
+            <option value="Service Status">Service Status</option>
           </select>
         </div>
 
@@ -86,25 +81,17 @@ export default {
             <input
               type="text"
               class="w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
-              v-model="searchname"
-              placeholder="Enter Service Name"
+              v-model="name"
               v-on:keyup.enter="handleSubmitForm"
-            />
+              placeholder="Enter service name"
+            />  
           </label>
         </div>
-        <!-- Displays status option box-->
-        <div class="flex flex-col" v-if="searchBy === 'Status'">
-          <select
-            class="rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
-            v-model="searchstatus"
-            placeholder="Choose Service Status"
-            v-on:keyup.enter="handleSubmitForm"
-          >
+        <!-- Displays status option box -->
+        <div class="flex flex-col" v-if="searchBy === 'Service Status'">
           <!-- Users choose if Active or Not Active-->
-            <option value="" disabled selected>Choose one   </option>
-            <option value="Active">Active</option>
-            <option value="Not Active">Not Active</option>
-          </select>
+          <input type="radio" name="status" v-model="status" value="Active" >Active
+          <input type="radio" name="status" v-model="status" value="Not Active" >Not Active
         </div>
       </div>
       <div
@@ -131,7 +118,7 @@ export default {
       </div>
 
     </div>
-    
+
     <hr class="mt-10 mb-10" />
     <!-- Display All Services Data -->
     <div
@@ -145,7 +132,7 @@ export default {
         <table class="min-w-full shadow-md rounded">
           <thead class="bg-gray-50 text-xl">
             <tr>
-              <th class="p-4 text-left">Service</th>
+              <th class="p-4 text-left">Service Name</th>
               <th class="p-4 text-left">Status</th>
             </tr>
           </thead>
@@ -154,16 +141,13 @@ export default {
           <tbody class="divide-y divide-gray-300">
             <!-- when row is clicked, checks if the current logged in user is an editor-->
             <!-- then call function (editService) and pass argument (id of service to be updated)-->
-            <tr     
-            @click="user.role == 'Editor'? editService(item.id): null"       
-            v-for="item in queryData">
-              <!-- displays the queried data depending on the search of the user-->
-              <td class="p-2 text-left">
-                {{ item.servicename }} 
-              </td>
-              <td class="p-2 text-left">
-                {{ item.status }}
-              </td>
+            <tr
+              @click="editService(service._id)"
+              v-for="service in services"
+              :key="service._id"
+            >
+              <td class="p-2 text-left">{{ service.name }}</td>
+              <td class="p-2 text-left">{{ service.status }}</td>
             </tr>
           </tbody>
         </table>
