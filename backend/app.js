@@ -38,6 +38,7 @@ app.use('/clients', require('./routes/clients'))
 app.use('/events', require('./routes/events'))
 app.use('/org', require('./routes/org'))
 app.use('/services', require('./routes/services'))
+app.use('/login', require('./routes/login'))
 
 app.listen(PORT, () => {
   console.log(`Server listening on port ${PORT}`)
