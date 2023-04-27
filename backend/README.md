@@ -15,7 +15,7 @@ Setup a .env file with the following variables: MONGO_URL, PORT and ORG
 
     MONGO_URL= that is the Mongo URL connection string
     PORT= e.g.3000
-    ORG= that is the orgid (as a string)
+    ORG= e.g. 1    that is the orgid (as a string)
 
 ### Compiles and hot-reloads for development
 

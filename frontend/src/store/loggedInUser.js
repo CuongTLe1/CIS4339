@@ -1,4 +1,6 @@
 import { defineStore } from 'pinia'
+import axios from 'axios'
+const apiURL = import.meta.env.VITE_ROOT_API
 
 //defining a store
 export const useLoggedInUserStore = defineStore({
@@ -9,29 +11,38 @@ export const useLoggedInUserStore = defineStore({
     return {
       role: '', //Viewer or Editor
       isLoggedIn: false,
-      name:''
     }
   },
 
+  //action to login the user
   actions: {
     async login(username, password) {
-      try {
-        const response = await apiLogin(username, password);
-        this.$patch({
-          
-          isLoggedIn: response.isAllowed,
-          role: response.role,
-          name: response.name,
-          
+       try {
+        await axios.post(`${apiURL}/users/login`, {
+          username: username,
+          password: password
         })
-        this.$router.push('/');
+        .then(response => {
+          //if response is "Success" then username and password is valid
+          if (response.data.message === 'Success') {
+            alert('Login Success');
+            this.$patch({
+              isLoggedIn: true,
+              role: response.data.role 
+            })
+            // route to the home page/dashboard
+            this.$router.push('/');
+          } else {
+            // Login failed, show error message
+            alert('Invalid Credentials');
+          }
+        })
       } catch(error) {
         console.log(error)
       }
     },
     logout() {
       this.$patch({
-        name: '',
         role:'',
         isLoggedIn: false
       });
@@ -40,12 +51,4 @@ export const useLoggedInUserStore = defineStore({
     }
   }
 });
-
-//simulate a login
-function apiLogin(u, p) {
-  if (u === "ab" && p === "ab") return Promise.resolve({ isAllowed: true, role:"Viewer", name: "John Doe" });
-  if (u === "cb" && p === "cb") return Promise.resolve({ isAllowed: true, role:"Editor", name: "John Smith" });
-  if (p === "ab") return Promise.resolve({ isAllowed: false });
-  return Promise.reject(new Error("invalid credentials"));
-}
 

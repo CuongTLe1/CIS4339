@@ -1,8 +1,16 @@
 <script>
 import axios from 'axios'
 const apiURL = import.meta.env.VITE_ROOT_API
+import { useLoggedInUserStore } from "@/store/loggedInUser";
 
 export default {
+  setup(){
+    const user = useLoggedInUserStore();
+
+    return{
+      user
+    }
+  },
   data() {
     return {
       services: [], //array to hold all arrays
@@ -88,7 +96,7 @@ export default {
           </label>
         </div>
         <!-- Displays status option box -->
-        <div class="flex flex-col" v-if="searchBy === 'Service Status'">
+        <div class="flex-col" v-if="searchBy === 'Service Status'">
           <!-- Users choose if Active or Not Active-->
           <input type="radio" name="status" v-model="status" value="Active" >Active
           <input type="radio" name="status" v-model="status" value="Not Active" >Not Active
@@ -142,7 +150,7 @@ export default {
             <!-- when row is clicked, checks if the current logged in user is an editor-->
             <!-- then call function (editService) and pass argument (id of service to be updated)-->
             <tr
-              @click="editService(service._id)"
+            @click="user.role == 'Editor'? editService(service._id): null"
               v-for="service in services"
               :key="service._id"
             >

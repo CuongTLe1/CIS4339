@@ -4,11 +4,19 @@ import axios from 'axios'
 import AttendanceChart from './barChart.vue'
 const apiURL = import.meta.env.VITE_ROOT_API
 import doughnutChart from '@/components/doughnutChart.vue'
+import { useLoggedInUserStore } from "@/store/loggedInUser";
 
 export default {
   components: {
     AttendanceChart,
     doughnutChart
+  },
+  setup(){
+    const user = useLoggedInUserStore();
+
+    return{
+      user
+    }
   },
   data() {
     return {
@@ -95,8 +103,9 @@ export default {
               </tr>
             </thead>
             <tbody class="divide-y divide-gray-300">
+              <!--check if the logged in user is an editor, if yes, allow to click on the row to edit-->
               <tr
-                @click="editEvent(event._id)"
+              @click="user.role == 'Editor'? editEvent(event._id): null"
                 v-for="event in recentEvents"
                 :key="event._id"
               >
