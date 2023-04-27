@@ -80,6 +80,23 @@ router.get('/lookup/:phoneNumber', (req, res, next) => {
   )
 })
 
+// GET client zipcodes
+router.get('/zipcodes', (req, res, next) => {
+  clients.aggregate(
+    [
+      { $match: { 'address.zip': { $ne: '' } } },
+      { $group: { _id: '$address.zip', count: { $sum: 1 } } }
+    ],
+    (error, data) => {
+      if (error) {
+        return next(error)
+      } else {
+        return res.json(data)
+      }
+    }
+  )
+})
+
 // POST new client
 router.post('/', (req, res, next) => {
   const newClient = req.body
