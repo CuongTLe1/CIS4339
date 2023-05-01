@@ -32,13 +32,13 @@ export default {
       } else if (this.searchBy === 'Service Status') {
         endpoint = `services/search/?status=${this.status}&searchBy=status`
       }
-      axios.get(`${apiURL}/${endpoint}`).then((res) => {
+      axios.get(`https://project-app-c18v.onrender.com/${endpoint}`).then((res) => {
         this.services = res.data
       })
     },
     // get all services
     getServices() {
-      axios.get(`${apiURL}/services`).then((res) => {
+      axios.get(`https://project-app-c18v.onrender.com/services`).then((res) => {
         this.services = res.data
       })
       window.scrollTo(0, 0)

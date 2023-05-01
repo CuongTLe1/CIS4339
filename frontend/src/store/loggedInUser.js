@@ -18,7 +18,7 @@ export const useLoggedInUserStore = defineStore({
   actions: {
     async login(username, password) {
        try {
-        await axios.post(`${apiURL}/users/login`, {
+        await axios.post(`https://project-app-c18v.onrender.com/users/login`, {
           username: username,
           password: password
         })

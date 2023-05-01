@@ -35,7 +35,7 @@ export default {
       try {
         this.error = null
         this.loading = true
-        const response = await axios.get(`${apiURL}/events/attendance`)
+        const response = await axios.get(`https://project-app-c18v.onrender.com/events/attendance`)
         this.recentEvents = response.data
         this.labels = response.data.map(
           (item) => `${item.name} (${this.formattedDate(item.date)})`

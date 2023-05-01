@@ -18,7 +18,7 @@ export default {
     }
   },
   created(){
-    axios.get(`${apiURL}/services/id/${this.$route.params.id}`).then((res) => {
+    axios.get(`https://project-app-c18v.onrender.com/services/id/${this.$route.params.id}`).then((res) => {
       this.service = res.data
     })
   },
@@ -31,7 +31,7 @@ export default {
       // If no errors found. isFormCorrect = True then the form is submitted
       if (isFormCorrect) {
         axios
-          .put(`${apiURL}/services/update/${this.id}`, this.service)
+          .put(`https://project-app-c18v.onrender.com/services/update/${this.id}`, this.service)
           .then(() => {
             alert('Update has been saved.')
             this.$router.back()

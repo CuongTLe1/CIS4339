@@ -41,13 +41,13 @@ export default {
       } else if (this.searchBy === 'Event Date') {
         endpoint = `events/search/?eventDate=${this.eventDate}&searchBy=date`
       }
-      axios.get(`${apiURL}/${endpoint}`).then((res) => {
+      axios.get(`https://project-app-c18v.onrender.com/${endpoint}`).then((res) => {
         this.events = res.data
       })
     },
     // abstracted method to get events
     getEvents() {
-      axios.get(`${apiURL}/events`).then((res) => {
+      axios.get(`https://project-app-c18v.onrender.com/events`).then((res) => {
         this.events = res.data
       })
       window.scrollTo(0, 0)

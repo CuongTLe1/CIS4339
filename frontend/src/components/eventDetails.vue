@@ -32,17 +32,17 @@ export default {
     }
   },
   created() {
-    axios.get(`${apiURL}/events/id/${this.$route.params.id}`).then((res) => {
+    axios.get(`https://project-app-c18v.onrender.com/events/id/${this.$route.params.id}`).then((res) => {
       this.event = res.data
       this.event.date = this.formattedDate(this.event.date)
       this.event.attendees.forEach((e) => {
-        axios.get(`${apiURL}/clients/id/${e}`).then((res) => {
+        axios.get(`https://project-app-c18v.onrender.com/clients/id/${e}`).then((res) => {
           this.clientAttendees.push(res.data)
         })
       })
     })
     // get all services that are Active
-    axios.get(`${apiURL}/services/search/?status=Active&searchBy=status`).then((res) => {
+    axios.get(`https://project-app-c18v.onrender.com/services/search/?status=Active&searchBy=status`).then((res) => {
       this.service = res.data
     })
   },
@@ -57,7 +57,7 @@ export default {
         .toISODate()
     },
     handleEventUpdate() {
-      axios.put(`${apiURL}/events/update/${this.id}`, this.event).then(() => {
+      axios.put(`https://project-app-c18v.onrender.com/events/update/${this.id}`, this.event).then(() => {
         alert('Update has been saved.')
         this.$router.back()
       })
@@ -66,7 +66,7 @@ export default {
       this.$router.push({ name: 'updateclient', params: { id: clientID } })
     },
     eventDelete() {
-      axios.delete(`${apiURL}/events/${this.id}`).then(() => {
+      axios.delete(`https://project-app-c18v.onrender.com/events/${this.id}`).then(() => {
         alert('Event has been deleted.')
         this.$router.push({ name: 'findevents' })
       })

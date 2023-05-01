@@ -32,13 +32,13 @@ export default {
       } else if (this.searchBy === 'Client Number') {
         endpoint = `clients/search/?phoneNumber.primary=${this.phoneNumber}&searchBy=number`
       }
-      axios.get(`${apiURL}/${endpoint}`).then((res) => {
+      axios.get(`https://project-app-c18v.onrender.com/${endpoint}`).then((res) => {
         this.queryData = res.data
       })
     },
     // abstract get clients call
     getClients() {
-      axios.get(`${apiURL}/clients`).then((res) => {
+      axios.get(`https://project-app-c18v.onrender.com/clients`).then((res) => {
         this.queryData = res.data
       })
       window.scrollTo(0, 0)

@@ -36,7 +36,7 @@ export default {
     }
   },
   created() {
-    axios.get(`${apiURL}/org`).then((res) => {
+    axios.get(`https://project-app-c18v.onrender.com/org`).then((res) => {
       this.org = res.data._id
     })
   },
@@ -54,7 +54,7 @@ export default {
       this.v$.$validate().then((valid) => {
         if (valid) {
           axios
-            .get(`${apiURL}/clients/lookup/${this.client.phoneNumber.primary}`)
+            .get(`https://project-app-c18v.onrender.com/clients/lookup/${this.client.phoneNumber.primary}`)
             .then((res) => {
               if (res.data) {
                 if (res.data.orgs.includes(this.org)) {
@@ -62,7 +62,7 @@ export default {
                   this.$router.push({ name: 'findclient' })
                 } else {
                   axios
-                    .put(`${apiURL}/clients/register/${res.data._id}`)
+                    .put(`https://project-app-c18v.onrender.com/clients/register/${res.data._id}`)
                     .then(() => {
                       alert('Client registered')
                       this.$router.push({ name: 'findclient' })
@@ -73,7 +73,7 @@ export default {
                 }
               } else {
                 axios
-                  .post(`${apiURL}/clients`, this.client)
+                  .post(`https://project-app-c18v.onrender.com/clients`, this.client)
                   .then(() => {
                     alert('Client added')
                     this.$router.push({ name: 'findclient' })

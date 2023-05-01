@@ -17,7 +17,7 @@ export default {
     }
   },
   created() {
-    axios.get(`${apiURL}/org`).then((res) => {
+    axios.get(`https://project-app-c18v.onrender.com/org`).then((res) => {
       this.orgName = res.data.name
     })
   }

@@ -25,7 +25,7 @@ export default {
       // If no errors found. isFormCorrect = True then the form is submitted
       if (isFormCorrect) {
         axios
-          .post(`${apiURL}/services`, this.service)
+          .post(`https://project-app-c18v.onrender.com/services`, this.service)
           .then(() => {
             alert('Service has been added.')
             this.$router.push({ name: 'findservices' })

@@ -35,7 +35,7 @@ export default {
       // If no errors found. isFormCorrect = True then the form is submitted
       if (isFormCorrect) {
         axios
-          .post(`${apiURL}/events`, this.event)
+          .post(`https://project-app-c18v.onrender.com/events`, this.event)
           .then(() => {
             alert('Event has been added.')
             this.$router.push({ name: 'findevents' })
@@ -48,7 +48,7 @@ export default {
   },
   // get all services that are Active
   created(){
-    axios.get(`${apiURL}/services/search/?status=Active&searchBy=status`).then((res) => {
+    axios.get(`https://project-app-c18v.onrender.com/services/search/?status=Active&searchBy=status`).then((res) => {
       // simplified setting client
       this.service = res.data
     })

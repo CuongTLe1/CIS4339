@@ -38,11 +38,11 @@ export default {
     }
   },
   created() {
-    axios.get(`${apiURL}/clients/id/${this.$route.params.id}`).then((res) => {
+    axios.get(`https://project-app-c18v.onrender.com/clients/id/${this.$route.params.id}`).then((res) => {
       // simplified setting client
       this.client = res.data
     })
-    axios.get(`${apiURL}/events`).then((res) => {
+    axios.get(`https://project-app-c18v.onrender.com/events`).then((res) => {
       // simplified setting eventsAll
       this.eventsAll = res.data
     })
@@ -66,7 +66,7 @@ export default {
     },
     getEventsRegistered() {
       axios
-        .get(`${apiURL}/events/client/${this.$route.params.id}`)
+        .get(`https://project-app-c18v.onrender.com/events/client/${this.$route.params.id}`)
         .then((res) => {
           // simplified setting eventsRegistered
           this.eventsRegistered = res.data
@@ -78,7 +78,7 @@ export default {
       // If no errors found. isFormCorrect = True then the form is submitted
       if (isFormCorrect) {
         axios
-          .put(`${apiURL}/clients/update/${this.id}`, this.client)
+          .put(`https://project-app-c18v.onrender.com/clients/update/${this.id}`, this.client)
           .then(() => {
             alert('Update has been saved.')
             this.$router.back()
@@ -88,7 +88,7 @@ export default {
     addToEvent() {
       this.eventsSelected.forEach((event) => {
         axios
-          .put(`${apiURL}/events/register`, null, {
+          .put(`https://project-app-c18v.onrender.com/events/register`, null, {
             params: { event: event._id, client: this.id }
           })
           .then(() => this.getEventsRegistered())
@@ -106,16 +106,16 @@ export default {
     // then pull org from client org array
     deregisterClient() {
       axios
-        .get(`${apiURL}/events/client/${this.id}`)
+        .get(`https://project-app-c18v.onrender.com/events/client/${this.id}`)
         .then((res) => {
           res.data.forEach((e) => {
-            axios.put(`${apiURL}/events/deregister`, null, {
+            axios.put(`https://project-app-c18v.onrender.com/events/deregister`, null, {
               params: { event: e._id, client: this.id }
             })
           })
         })
         .finally(
-          axios.put(`${apiURL}/clients/deregister/${this.id}`).then(() => {
+          axios.put(`https://project-app-c18v.onrender.com/clients/deregister/${this.id}`).then(() => {
             alert('Client has been deleted.')
             this.$router.push({ name: 'findclient' })
           })
@@ -123,7 +123,7 @@ export default {
     },
     // unused hard delete method
     deleteClient() {
-      axios.delete(`${apiURL}/clients/${this.id}`).then(() => {
+      axios.delete(`https://project-app-c18v.onrender.com/clients/${this.id}`).then(() => {
         alert('Client has been deleted.')
         this.$router.push({ name: 'findclient' })
       })

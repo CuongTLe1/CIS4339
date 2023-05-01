@@ -13,7 +13,7 @@ const apiURL = import.meta.env.VITE_ROOT_API
 export default {
   mounted() {
     axios
-      .get(`${apiURL}/clients/zipcodes`)
+      .get(`https://project-app-c18v.onrender.com/clients/zipcodes`)
       .then((response) => {
         const zipcodesData = response.data
 
